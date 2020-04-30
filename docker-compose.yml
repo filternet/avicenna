@@ -9,7 +9,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/London
+      - TZ=UTC
       - SERVERURL=auto #optional
       - SERVERPORT=51820 #optional
       - PEERS=1 #optional
@@ -20,4 +20,21 @@ services:
       - /lib/modules:/lib/modules
     ports:
       - 51820:51820/udp
+    restart: unless-stopped
+  openvpn-as:
+    image: linuxserver/openvpn-as:2.8.3-f28d2eae-Ubuntu18-ls67
+    container_name: openvpn-as
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+      - INTERFACE=eth0 #optional
+    volumes:
+      - ./openvpn-as/config:/config
+    ports:
+      - 943:943
+      - 9443:9443
+      - 1194:1194/udp
     restart: unless-stopped
